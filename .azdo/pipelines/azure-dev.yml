@@ -16,18 +16,16 @@ steps:
   - task: setup-azd@0 
     displayName: Install azd
 
-  # If you can't install above task in your organization, you can comment it and uncomment below task to install azd
-  # - task: Bash@3
-  #   displayName: Install azd
-  #   inputs:
-  #     targetType: 'inline'
-  #     script: |
-  #       curl -fsSL https://aka.ms/install-azd.sh | bash
-
-  # azd delegate auth to az to use service connection with AzureCLI@2
   - pwsh: |
-      azd config set auth.useAzCliAuth "true"
-    displayName: Configure AZD to Use AZ CLI Authentication.
+      azd auth login `
+      --client-id $env:AZURE_CLIENT_ID `
+      --client-secret $env:AZURE_CLIENT_SECRET `
+      --tenant-id $env:AZURE_TENANT_ID
+    displayName: Login with Service Principal
+    env:
+      AZURE_CLIENT_ID: $(AZURE_CLIENT_ID)
+      AZURE_CLIENT_SECRET: $(AZURE_CLIENT_SECRET)
+      AZURE_TENANT_ID: $(AZURE_TENANT_ID)
 
   - task: AzureCLI@2
     displayName: Provision Infrastructure
