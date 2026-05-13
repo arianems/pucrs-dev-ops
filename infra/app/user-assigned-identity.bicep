@@ -1,7 +1,7 @@
 metadata description = 'Creates a Microsoft Entra user-assigned identity.'
 
 param name string
-param location string = resourceGroup().location
+param location string = 'centralus'
 param tags object = {}
 
 resource identity 'Microsoft.ManagedIdentity/userAssignedIdentities@2023-01-31' = {

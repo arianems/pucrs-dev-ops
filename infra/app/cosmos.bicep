@@ -8,11 +8,11 @@ param userPrincipalId string
 param managedIdentityId string
 
 @description('The name of the Azure Cosmos DB account.')
-param azureCosmosDBAccountName string = 'csms-${toLower(uniqueString(subscription().id, resourceGroup().id, resourceGroup().location))}'
+param azureCosmosDBAccountName string = 'csms-${toLower(uniqueString(subscription().id, resourceGroup().id, 'centralus'))}'
 
 resource account 'Microsoft.DocumentDB/databaseAccounts@2023-04-15' = {
   name: azureCosmosDBAccountName
-  location: resourceGroup().location
+  location: 'centralus'
   kind: 'GlobalDocumentDB'
   properties: {
     consistencyPolicy: {
@@ -21,7 +21,7 @@ resource account 'Microsoft.DocumentDB/databaseAccounts@2023-04-15' = {
     databaseAccountOfferType: 'Standard'
     locations: [
       {
-        locationName: resourceGroup().location
+        locationName: 'centralus'
       }
     ]
     disableLocalAuth: true
