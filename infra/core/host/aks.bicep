@@ -98,7 +98,7 @@ param principalId string = ''
 
 @description('The type of principal to assign application roles')
 @allowed(['Device','ForeignGroup','Group','ServicePrincipal','User'])
-param principalType string = 'User'
+param principalType string = 'ServicePrincipal'
 
 @description('Kubernetes Version')
 param kubernetesVersion string = '1.27'

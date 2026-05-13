@@ -8,7 +8,7 @@ param principalId string
 
 @description('The principal type to assign the role to.')
 @allowed(['Device','ForeignGroup','Group','ServicePrincipal','User'])
-param principalType string = 'User'
+param principalType string = 'ServicePrincipal'
 
 var aksClusterAdminRole = subscriptionResourceId('Microsoft.Authorization/roleDefinitions', 'b1ff04bb-8a4e-4dc4-8eb5-8693973ce19b')
 
