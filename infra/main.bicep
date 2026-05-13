@@ -17,9 +17,9 @@ param location string
 param principalId string = ''
 
 param storageAccountName string = ''
-param containerAppsEnvName string = ''
-param containerAppsAppName string = ''
-param containerRegistryName string = ''
+param containerAppsEnvName string = 'fase-01-cae'
+param containerAppsAppName string = 'fase-01-ca'
+param containerRegistryName string = 'fase-01-cr'
 
 param serviceName string = 'aca'
 
