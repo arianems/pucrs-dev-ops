@@ -1,48 +1,40 @@
-# Run when commits are pushed to mainline branch (main or master)
-# Set this to the mainline branch you are using
 trigger:
   - main
   - master
-
-# Azure Pipelines workflow to deploy to Azure using azd
-# To configure required secrets and service connection for connecting to Azure, simply run `azd pipeline config --provider azdo`
-# Task "Install azd" needs to install setup-azd extension for azdo - https://marketplace.visualstudio.com/items?itemName=ms-azuretools.azd
-# See below for alternative task to install azd if you can't install above task in your organization
 
 pool:
   vmImage: ubuntu-latest
 
 steps:
-  - task: setup-azd@0 
+  - task: setup-azd@0
     displayName: Install azd
 
   - pwsh: |
       azd auth login `
-      --client-id $env:AZURE_CLIENT_ID `
-      --client-secret $env:AZURE_CLIENT_SECRET `
-      --tenant-id $env:AZURE_TENANT_ID
+        --client-id $env:AZURE_CLIENT_ID `
+        --client-secret $env:AZURE_CLIENT_SECRET `
+        --tenant-id $env:AZURE_TENANT_ID
     displayName: Login with Service Principal
     env:
-      AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
-      AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
-      AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+      AZURE_CLIENT_ID: $(AZURE_CLIENT_ID)
+      AZURE_CLIENT_SECRET: $(AZURE_CLIENT_SECRET)
+      AZURE_TENANT_ID: $(AZURE_TENANT_ID)
 
   - task: AzureCLI@2
     displayName: Provision Infrastructure
     inputs:
-    azureSubscription: azconnection
-    scriptType: bash
-    scriptLocation: inlineScript
-    inlineScript: |
-      azd provision --no-prompt
+      azureSubscription: azconnection
+      scriptType: bash
+      scriptLocation: inlineScript
+      inlineScript: |
+        azd provision --no-prompt
     env:
-      AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-      AZURE_ENV_NAME: ${{ vars.AZURE_ENV_NAME }}
-      AZURE_LOCATION: ${{ vars.AZURE_LOCATION }}
-      AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
-      AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
-      AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
-
+      AZURE_SUBSCRIPTION_ID: $(AZURE_SUBSCRIPTION_ID)
+      AZURE_ENV_NAME: $(AZURE_ENV_NAME)
+      AZURE_LOCATION: $(AZURE_LOCATION)
+      AZURE_CLIENT_ID: $(AZURE_CLIENT_ID)
+      AZURE_CLIENT_SECRET: $(AZURE_CLIENT_SECRET)
+      AZURE_TENANT_ID: $(AZURE_TENANT_ID)
 
   - task: AzureCLI@2
     displayName: Deploy Application
@@ -56,3 +48,6 @@ steps:
       AZURE_SUBSCRIPTION_ID: $(AZURE_SUBSCRIPTION_ID)
       AZURE_ENV_NAME: $(AZURE_ENV_NAME)
       AZURE_LOCATION: $(AZURE_LOCATION)
+      AZURE_CLIENT_ID: $(AZURE_CLIENT_ID)
+      AZURE_CLIENT_SECRET: $(AZURE_CLIENT_SECRET)
+      AZURE_TENANT_ID: $(AZURE_TENANT_ID)
