@@ -11,7 +11,7 @@
       "principalId": {
         "value": "${AZURE_PRINCIPAL_ID}"
       },
-      "containerAppEnvName":{
+      "containerAppsEnvName":{
         "value": "${CONTAINER_APP_ENV_NAME}"
       },
       "containerAppsAppName":{
