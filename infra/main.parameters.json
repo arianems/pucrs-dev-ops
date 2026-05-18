@@ -10,6 +10,21 @@
       },
       "principalId": {
         "value": "${AZURE_PRINCIPAL_ID}"
+      },
+      "containerAppEnvName":{
+        "value": "${CONTAINER_APP_ENV_NAME}"
+      },
+      "containerAppsAppName":{
+        "value": "${CONTAINER_APP_NAME}"
+      },
+      "containerRegistryName":{
+        "value": "${CONTAINER_REGISTRY_NAME}"
+      },
+      "serviceName":{
+        "value": "${SERVICE_NAME}"
+      },
+      "storageAccountName":{
+        "value": "${STORAGE_ACCOUNT_NAME}"
       }
     }
 }
