@@ -132,7 +132,7 @@ module containerAppsEnv './core/host/container-apps.bicep' = {
 
 // Container app
 module web 'app/app.bicep' = {
-  name: serviceName
+  name: '${containerAppsAppName}${serviceName}'
   scope: rg
   params: {
     appName: '${containerAppsAppName}${environmentName}'
