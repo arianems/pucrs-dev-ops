@@ -39,7 +39,7 @@ var tags = {
 
 // Organize resources in a resource group
 resource rg 'Microsoft.Resources/resourceGroups@2021-04-01' = {
-  name: 'abbrs.resourcesResourceGroups'
+  name: '${abbrs.resourcesResourceGroups}${environmentName}'
   location: location
   tags: tags
 }

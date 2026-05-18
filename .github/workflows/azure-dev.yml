@@ -25,7 +25,7 @@ jobs:
       CONTAINER_APP_NAME: ${{ vars.CONTAINER_APP_NAME }}${{ vars.AZURE_ENV_NAME }}
       CONTAINER_APP_ENV_NAME: ${{ vars.CONTAINER_APP_ENV_NAME }}${{ vars.AZURE_ENV_NAME }}
       CONTAINER_REGISTRY_NAME: ${{ vars.CONTAINER_REGISTRY_NAME }}${{ vars.AZURE_ENV_NAME }}
-      SERVICE_NAME: ${{ vars.SERVICE_NAME }}${{ vars.AZURE_ENV_NAME }}
+      SERVICE_NAME: ${{ vars.SERVICE_NAME }}
       STORAGE_ACCOUNT_NAME: ${{ vars.STORAGE_ACCOUNT_NAME }}${{ vars.AZURE_ENV_NAME }}
     steps:
       - name: Checkout
@@ -79,7 +79,7 @@ jobs:
       CONTAINER_APP_NAME: ${{ vars.CONTAINER_APP_NAME }}${{ vars.AZURE_ENV_NAME }}
       CONTAINER_APP_ENV_NAME: ${{ vars.CONTAINER_APP_ENV_NAME }}${{ vars.AZURE_ENV_NAME }}
       CONTAINER_REGISTRY_NAME: ${{ vars.CONTAINER_REGISTRY_NAME }}${{ vars.AZURE_ENV_NAME }}
-      SERVICE_NAME: ${{ vars.SERVICE_NAME }}${{ vars.AZURE_ENV_NAME }}
+      SERVICE_NAME: ${{ vars.SERVICE_NAME }}
       STORAGE_ACCOUNT_NAME: ${{ vars.STORAGE_ACCOUNT_NAME }}${{ vars.AZURE_ENV_NAME }}
     steps:
       - name: Checkout
@@ -133,7 +133,7 @@ jobs:
       CONTAINER_APP_NAME: ${{ vars.CONTAINER_APP_NAME }}${{ vars.AZURE_ENV_NAME }}
       CONTAINER_APP_ENV_NAME: ${{ vars.CONTAINER_APP_ENV_NAME }}${{ vars.AZURE_ENV_NAME }}
       CONTAINER_REGISTRY_NAME: ${{ vars.CONTAINER_REGISTRY_NAME }}${{ vars.AZURE_ENV_NAME }}
-      SERVICE_NAME: ${{ vars.SERVICE_NAME }}${{ vars.AZURE_ENV_NAME }}
+      SERVICE_NAME: ${{ vars.SERVICE_NAME }}
       STORAGE_ACCOUNT_NAME: ${{ vars.STORAGE_ACCOUNT_NAME }}${{ vars.AZURE_ENV_NAME }}
     steps:
       - name: Checkout
