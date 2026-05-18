@@ -38,7 +38,7 @@ var tags = {
 
 // Organize resources in a resource group
 resource rg 'Microsoft.Resources/resourceGroups@2021-04-01' = {
-  name: '${abbrs.resourcesResourceGroups}${environmentName}'
+  name: 'abbrs.resourcesResourceGroups'
   location: location
   tags: tags
 }
@@ -57,7 +57,7 @@ module storage './core/storage/storage-account.bicep' = {
   name: 'storage'
   scope: rg
   params: {
-    name: '${storageAccountName}${environmentName}'
+    name: storageAccountName
     location: location
     tags: tags
     allowSharedKeyAccess: false
@@ -124,18 +124,18 @@ module containerAppsEnv './core/host/container-apps.bicep' = {
   scope: rg
   params: {
     name: 'app'
-    containerAppsEnvironmentName: '${containerAppsEnvName}${environmentName}'
-    containerRegistryName: '${containerRegistryName}${environmentName}'
+    containerAppsEnvironmentName: containerAppsEnvName
+    containerRegistryName: containerRegistryName
     location: location
   }
 }
 
 // Container app
 module web 'app/app.bicep' = {
-  name: '${containerAppsAppName}${serviceName}'
+  name: containerAppsAppName
   scope: rg
   params: {
-    appName: '${containerAppsAppName}${environmentName}'
+    appName: containerAppsAppName
     storageAccountBlobEndpoint: storage.outputs.blobEndpoint
     storageAccountTableEndpoint: storage.outputs.tableEndpoint
     containerAppsEnvironmentName: containerAppsEnv.outputs.environmentName
