@@ -7,7 +7,7 @@ param tags object = {}
 param identityName string
 param containerAppsEnvironmentName string
 param containerRegistryName string
-param serviceName string = 'aca'
+param serviceName string
 param exists bool
 
 @description('Blob endpoint for Azure Storage account.')

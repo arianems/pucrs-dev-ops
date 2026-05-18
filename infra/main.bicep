@@ -29,7 +29,8 @@ param containerAppsAppName string
 param containerRegistryName string 
 
 @description('Resource name for service app')
-param serviceName string = 'aca'
+param serviceName string
+
 var abbrs = loadJsonContent('./abbreviations.json')
 
 var tags = {
