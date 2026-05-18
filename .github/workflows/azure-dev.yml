@@ -20,6 +20,12 @@ jobs:
       AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
       AZURE_ENV_NAME: ${{ vars.AZURE_ENV_NAME }}
       AZURE_LOCATION: ${{ vars.AZURE_LOCATION }}
+      CONTAINER_APP_NAME: ${{ vars.CONTAINER_APP_NAME }}
+      CONTAINER_APP_ENV_NAME: ${{ vars.CONTAINER_APP_ENV_NAME }}
+      CONTAINER_REGISTRY_NAME: ${{ vars.CONTAINER_REGISTRY_NAME }}
+      SERVICE_NAME: ${{ vars.SERVICE_NAME }}
+      STORAGE_ACCOUNT_NAME: ${{ vars.STORAGE_ACCOUNT_NAME }}
+      ACR_NAME: ${{ vars.ACR_NAME }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -68,6 +74,12 @@ jobs:
       AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
       AZURE_ENV_NAME: ${{ vars.AZURE_ENV_NAME }}
       AZURE_LOCATION: ${{ vars.AZURE_LOCATION }}
+      CONTAINER_APP_NAME: ${{ vars.CONTAINER_APP_NAME }}
+      CONTAINER_APP_ENV_NAME: ${{ vars.CONTAINER_APP_ENV_NAME }}
+      CONTAINER_REGISTRY_NAME: ${{ vars.CONTAINER_REGISTRY_NAME }}
+      SERVICE_NAME: ${{ vars.SERVICE_NAME }}
+      STORAGE_ACCOUNT_NAME: ${{ vars.STORAGE_ACCOUNT_NAME }}
+      ACR_NAME: ${{ vars.ACR_NAME }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -90,20 +102,20 @@ jobs:
           az account set --subscription "${{ secrets.AZURE_SUBSCRIPTION_ID }}"
 
       - name: Provision Infrastructure
-        run: azd provision --no-prompt
+        run: azd provision --no-prompt         
 
       - name: Log in to ACR
         run: az acr login --name ${{ secrets.ACR_NAME }}
 
       - name: Build and push container image
         run: |
-          docker build -t ${{ secrets.ACR_NAME }}.azurecr.io/${{ vars.IMAGE_NAME }}:${{ github.sha }} -f ./src/Dockerfile ./src
-          docker push ${{ secrets.ACR_NAME }}.azurecr.io/${{ vars.IMAGE_NAME }}:${{ github.sha }}
+          docker build -t ${{ vars.ACR_NAME }}.azurecr.io/${{ vars.IMAGE_NAME }}:${{ github.sha }} -f ./src/Dockerfile ./src
+          docker push ${{ vars.ACR_NAME }}.azurecr.io/${{ vars.IMAGE_NAME }}:${{ github.sha }}
 
       - name: Deploy Application
         run: azd deploy --no-prompt
         env:
-          SERVICE_ACA_IMAGE_NAME: ${{ secrets.ACR_NAME }}.azurecr.io/${{ vars.IMAGE_NAME }}:${{ github.sha }}
+          SERVICE_ACA_IMAGE_NAME: ${{ vars.ACR_NAME }}.azurecr.io/${{ vars.IMAGE_NAME }}:${{ github.sha }}
 
   deploy-prod:
     runs-on: ubuntu-latest
@@ -114,8 +126,14 @@ jobs:
       AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
       AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
       AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-      AZURE_ENV_NAME: ${{ vars.AZURE_ENV_NAME }}       # e.g. "myapp-prod"
+      AZURE_ENV_NAME: ${{ vars.AZURE_ENV_NAME }}
       AZURE_LOCATION: ${{ vars.AZURE_LOCATION }}
+      CONTAINER_APP_NAME: ${{ vars.CONTAINER_APP_NAME }}
+      CONTAINER_APP_ENV_NAME: ${{ vars.CONTAINER_APP_ENV_NAME }}
+      CONTAINER_REGISTRY_NAME: ${{ vars.CONTAINER_REGISTRY_NAME }}
+      SERVICE_NAME: ${{ vars.SERVICE_NAME }}
+      STORAGE_ACCOUNT_NAME: ${{ vars.STORAGE_ACCOUNT_NAME }}
+      ACR_NAME: ${{ vars.ACR_NAME }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -145,10 +163,10 @@ jobs:
 
       - name: Build and push container image
         run: |
-          docker build -t ${{ secrets.ACR_NAME }}.azurecr.io/${{ vars.IMAGE_NAME }}:${{ github.sha }} -f ./src/Dockerfile ./src
-          docker push ${{ secrets.ACR_NAME }}.azurecr.io/${{ vars.IMAGE_NAME }}:${{ github.sha }}
+          docker build -t ${{ vars.ACR_NAME }}.azurecr.io/${{ vars.IMAGE_NAME }}:${{ github.sha }} -f ./src/Dockerfile ./src
+          docker push ${{ vars.ACR_NAME }}.azurecr.io/${{ vars.IMAGE_NAME }}:${{ github.sha }}
 
       - name: Deploy Application
         run: azd deploy --no-prompt
         env:
-          SERVICE_ACA_IMAGE_NAME: ${{ secrets.ACR_NAME }}.azurecr.io/${{ vars.IMAGE_NAME }}:${{ github.sha }}
+          SERVICE_ACA_IMAGE_NAME: ${{ vars.ACR_NAME }}.azurecr.io/${{ vars.IMAGE_NAME }}:${{ github.sha }}
