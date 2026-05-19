@@ -53,28 +53,6 @@ module identity './app/user-assigned-identity.bicep' = {
   }
 }
 
-// Create a storage account
-module storage './core/storage/storage-account.bicep' = {
-  name: 'storage'
-  scope: rg
-  params: {
-    name: storageAccountName
-    location: location
-    tags: tags
-    allowSharedKeyAccess: false
-    containers: [
-      {
-        name: 'attachments'
-      }
-    ]
-    tables: [
-      {
-        name: 'tickets'
-      }
-    ]
-  }
-}
-
 // Assign storage blob data contributor to the user for local runs
 module userAssignStorage './core/security/role.bicep' = {
   name: 'assignStorage'
@@ -137,8 +115,6 @@ module web 'app/app.bicep' = {
   scope: rg
   params: {
     appName: containerAppsAppName
-    storageAccountBlobEndpoint: storage.outputs.blobEndpoint
-    storageAccountTableEndpoint: storage.outputs.tableEndpoint
     containerAppsEnvironmentName: containerAppsEnv.outputs.environmentName
     containerRegistryName: containerAppsEnv.outputs.registryName
     userAssignedManagedIdentity: {
