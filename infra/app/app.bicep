@@ -10,12 +10,6 @@ param containerRegistryName string
 param serviceName string
 param exists bool
 
-@description('Blob endpoint for Azure Storage account.')
-param storageAccountBlobEndpoint string
-
-@description('Table endpoint for Azure Storage account.')
-param storageAccountTableEndpoint string
-
 type managedIdentity = {
   resourceId: string
   clientId: string
@@ -32,11 +26,6 @@ module containerAppsApp '../core/host/container-app.bicep' = {
     containerRegistryName: containerRegistryName
     location: location
     tags: union(tags, { 'azd-service-name': serviceName })
-    secrets: {
-        'azure-managed-identity-client-id':  userAssignedManagedIdentity.clientId
-        'azure-storage-blob-endpoint': storageAccountBlobEndpoint
-        'azure-storage-table-endpoint': storageAccountTableEndpoint
-      }
     env: [
       {
         name: 'AZURE_MANAGED_IDENTITY_CLIENT_ID'
@@ -51,9 +40,9 @@ module containerAppsApp '../core/host/container-app.bicep' = {
         secretRef: 'azure-storage-table-endpoint'
       }
     ]
-    targetPort: 80
+    targetPort: 8080
+    external: true
     identityName: identityName
-    //imageName: 'mcr.microsoft.com/dotnet/samples:aspnetapp'
   }
 }
 

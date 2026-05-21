@@ -10,14 +10,14 @@ param allowedOrigins array = []
 param containerAppsEnvironmentName string
 
 @description('CPU cores allocated to a single container instance, e.g., 0.5')
-param containerCpuCoreCount string = '0.5'
+param containerCpuCoreCount string = '0.25'
 
 @description('The maximum number of replicas to run. Must be at least 1.')
 @minValue(1)
-param containerMaxReplicas int = 10
+param containerMaxReplicas int = 1
 
 @description('Memory allocated to a single container instance, e.g., 1Gi')
-param containerMemory string = '1.0Gi'
+param containerMemory string = '0.5Gi'
 
 @description('The minimum number of replicas to run. Must be at least 1.')
 param containerMinReplicas int = 1
@@ -61,13 +61,6 @@ param imageName string = ''
 param ingressEnabled bool = true
 
 param revisionMode string = 'Single'
-
-@description('The secrets required for the container')
-@secure()
-param secrets object = {}
-
-@description('The service binds associated with the container')
-param serviceBinds array = []
 
 @description('The name of the container apps add-on to use. e.g. redis')
 param serviceType string = ''
@@ -124,10 +117,6 @@ resource app 'Microsoft.App/containerApps@2023-05-02-preview' = {
         appProtocol: daprAppProtocol
         appPort: ingressEnabled ? targetPort : 0
       } : { enabled: false }
-      secrets: [for secret in items(secrets): {
-        name: secret.key
-        value: secret.value
-      }]
       service: !empty(serviceType) ? { type: serviceType } : null
       registries: usePrivateRegistry ? [
         {
@@ -137,7 +126,6 @@ resource app 'Microsoft.App/containerApps@2023-05-02-preview' = {
       ] : []
     }
     template: {
-      serviceBinds: !empty(serviceBinds) ? serviceBinds : null
       containers: [
         {
           image: !empty(imageName) ? imageName : 'mcr.microsoft.com/azuredocs/containerapps-helloworld:latest'

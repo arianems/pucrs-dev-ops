@@ -164,7 +164,7 @@ jobs:
 
       - name: Build and push container image
         run: |
-          docker build -t ${{ env.CONTAINER_REGISTRY_NAME }}.azurecr.io/${{ vars.IMAGE_NAME }}:${{ github.sha }} -f ./src/Dockerfile ./src
+          docker build -t ${{ env.CONTAINER_REGISTRY_NAME }}.azurecr.io/${{ vars.IMAGE_NAME }}:${{ github.sha }} -f ./src/DevOps.App/DevOps.App/Dockerfile .
           docker push ${{ env.CONTAINER_REGISTRY_NAME }}.azurecr.io/${{ vars.IMAGE_NAME }}:${{ github.sha }}
 
       - name: Deploy Application
