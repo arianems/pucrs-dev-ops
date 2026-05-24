@@ -95,6 +95,34 @@ resource "aws_security_group" "ecs" {
   }
 }
 
+# EC2 Target Group
+resource "aws_lb_target_group" "app" {
+  name             = "devops-app-tg"
+  port             = 8080
+  protocol         = "HTTP"
+  protocol_version = "HTTP1"
+  target_type      = "ip"
+  ip_address_type  = "ipv4"
+
+  vpc_id = "vpc-07bd90a2c0539ba96"
+
+  health_check {
+    enabled             = true
+    protocol            = "HTTP"
+    port                = "traffic-port"
+    path                = "/"
+    matcher             = "200"
+    interval            = 1200
+    timeout             = 30
+    healthy_threshold   = 5
+    unhealthy_threshold = 2
+  }
+
+  tags = {
+    Name = "devops-app-tg"
+  }
+}
+
 # ECS Service
 resource "aws_ecs_service" "app" {
   name            = "${var.app_name}-service"
