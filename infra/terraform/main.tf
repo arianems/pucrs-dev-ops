@@ -2,7 +2,7 @@ provider "aws" {
   region = var.aws_region
 }
 
-resource "aws_ecr_repository" "fase_01_devops" {
+resource "aws_ecr_repository" "app" {
   name                 = "fase-01-devops"
   image_tag_mutability = "MUTABLE"
 
