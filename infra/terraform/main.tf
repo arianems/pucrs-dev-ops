@@ -112,7 +112,7 @@ resource "aws_lb_target_group" "app" {
     port                = "traffic-port"
     path                = "/"
     matcher             = "200"
-    interval            = 1200
+    interval            = 300
     timeout             = 30
     healthy_threshold   = 5
     unhealthy_threshold = 2
