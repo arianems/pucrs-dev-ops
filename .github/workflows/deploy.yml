@@ -7,14 +7,14 @@ on:
       - main
 
 env:
-  AWS_REGION: ${{ vars.AWS_REGION }} #ok                 
-  ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY_NAME }}  #ok        
-  ECS_SERVICE: ${{ secrets.ECS_SERVICE_NAME }}  #ok                
-  ECS_CLUSTER: ${{ secrets.ECS_CLUSTER_NAME }}   #ok                
-  ECS_TASK_DEFINITION: ${{ vars.ECS_TASK_DEFINITION }}   #ok                                      
-  CONTAINER_NAME: ${{ secrets.CONTAINER_NAME }}   #ok 
-  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}  #ok
-  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}    #ok  
+  AWS_REGION: ${{ vars.AWS_REGION }}               
+  ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY_NAME }}      
+  ECS_SERVICE: ${{ secrets.ECS_SERVICE_NAME }}                
+  ECS_CLUSTER: ${{ secrets.ECS_CLUSTER_NAME }}               
+  ECS_TASK_DEFINITION: ${{ vars.ECS_TASK_DEFINITION }}                                      
+  CONTAINER_NAME: ${{ secrets.CONTAINER_NAME }}   
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}  
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
 jobs:
   deploy:

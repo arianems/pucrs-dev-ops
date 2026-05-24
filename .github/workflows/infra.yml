@@ -1,10 +1,10 @@
-name: Terraform
+name: Infra - Apply Terraform Changes
 
 on:
   workflow_dispatch:
-  # push:
-  #   paths:
-  #     - infra/**
+  push:
+    paths:
+      - infra/**
 
 jobs:
   terraform:
