@@ -50,7 +50,7 @@ resource "aws_ecs_task_definition" "app" {
 
   container_definitions = jsonencode([{
     name      = var.app_name
-    image     = "${aws_ecr_repository.app.repository_url}:latest"
+    image     = var.container_image
     essential = true
     portMappings = [{
       containerPort = 3000
@@ -60,7 +60,8 @@ resource "aws_ecs_task_definition" "app" {
     logConfiguration = {
       logDriver = "awslogs"
       options = {
-        "awslogs-group"         = "/ecs/${var.app_name}"
+        "awslogs-group"         = "/ecs/blazor-app-task"
+        "awslogs-create-group"  = "true",
         "awslogs-region"        = var.aws_region
         "awslogs-stream-prefix" = "ecs"
       }
@@ -68,11 +69,15 @@ resource "aws_ecs_task_definition" "app" {
   }])
 }
 
+data "aws_vpc" "default" {
+  default = true
+}
+
 # EC2 Security Group
 resource "aws_security_group" "ecs" {
-  name        = "devops-app-alb-sg"
+  name        = "devops-app-alb-sg-test"
   description = "Security group to allow access to app"
-  vpc_id      = "vpc-07bd90a2c0539ba96"
+  vpc_id      = data.aws_vpc.default.id
 
   ingress {
     description = "Allow HTTP app traffic"
@@ -97,14 +102,14 @@ resource "aws_security_group" "ecs" {
 
 # EC2 Target Group
 resource "aws_lb_target_group" "app" {
-  name             = "devops-app-tg"
+  name             = "devops-app-tg-test"
   port             = 8080
   protocol         = "HTTP"
   protocol_version = "HTTP1"
   target_type      = "ip"
   ip_address_type  = "ipv4"
 
-  vpc_id = "vpc-07bd90a2c0539ba96"
+  vpc_id = data.aws_vpc.default.id
 
   health_check {
     enabled             = true
@@ -123,6 +128,14 @@ resource "aws_lb_target_group" "app" {
   }
 }
 
+data "aws_subnets" "default" {
+  filter {
+    name   = "vpc-id"
+    values = [data.aws_vpc.default.id]
+  }
+}
+
+
 # ECS Service
 resource "aws_ecs_service" "app" {
   name            = var.aws_ecs_service
@@ -132,7 +145,7 @@ resource "aws_ecs_service" "app" {
   launch_type     = "FARGATE"
 
   network_configuration {
-    subnets          = var.subnet_ids
+    subnets          = data.aws_subnets.default.ids
     security_groups  = [aws_security_group.ecs.id]
     assign_public_ip = true
   }
