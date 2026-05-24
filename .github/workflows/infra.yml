@@ -2,9 +2,9 @@ name: Terraform
 
 on:
   workflow_dispatch:
-  push:
-    paths:
-      - infra/**
+  # push:
+  #   paths:
+  #     - infra/**
 
 jobs:
   terraform:
