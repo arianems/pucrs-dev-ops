@@ -7,7 +7,7 @@ on:
       - main
 
 env:
-  AWS_REGION: ${{ vars.AWS_REGION }}                  
+  AWS_REGION: ${{ vars.AWS_REGION }} #ok                 
   ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY_NAME }}  #ok        
   ECS_SERVICE: ${{ secrets.ECS_SERVICE_NAME }}  #ok                
   ECS_CLUSTER: ${{ secrets.ECS_CLUSTER_NAME }}   #ok                
