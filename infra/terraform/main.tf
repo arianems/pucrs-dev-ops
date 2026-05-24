@@ -3,7 +3,7 @@ provider "aws" {
 }
 
 resource "aws_ecr_repository" "app" {
-  name                 = "fase-01-devops"
+  name                 = var.aws_ecr_repository
   image_tag_mutability = "MUTABLE"
 
   image_scanning_configuration {
@@ -17,7 +17,7 @@ resource "aws_ecr_repository" "app" {
 
 # ECS Cluster
 resource "aws_ecs_cluster" "main" {
-  name = "${var.app_name}-cluster"
+  name = var.aws_ecs_cluster
 }
 
 # IAM Role para a task
@@ -125,7 +125,7 @@ resource "aws_lb_target_group" "app" {
 
 # ECS Service
 resource "aws_ecs_service" "app" {
-  name            = "${var.app_name}-service"
+  name            = var.aws_ecs_service
   cluster         = aws_ecs_cluster.main.id
   task_definition = aws_ecs_task_definition.app.arn
   desired_count   = 2
@@ -137,16 +137,9 @@ resource "aws_ecs_service" "app" {
     assign_public_ip = true
   }
 
-  load_balancer {
-    target_group_arn = aws_lb_target_group.app.arn
-    container_name   = var.app_name
-    container_port   = 3000
-  }
-
-  # Força novo deploy quando a task definition muda
   force_new_deployment = true
 
   lifecycle {
-    ignore_changes = [task_definition]  # deixa o CI/CD atualizar
+    ignore_changes = [task_definition]
   }
 }
