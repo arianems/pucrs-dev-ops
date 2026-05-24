@@ -30,11 +30,6 @@ data "aws_iam_role" "ecs_task_execution" {
   name = "ecsTaskExecutionRoleNew"
 }
 
-resource "aws_iam_role_policy_attachment" "ecs_task_execution" {
-  role       = data.aws_iam_role.ecs_task_execution.name
-  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
-}
-
 # EC2 Security Group
 resource "aws_security_group" "ecs" {
   name        = "${var.app_name}-sg"
