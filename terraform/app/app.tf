@@ -28,7 +28,7 @@ data "aws_security_group" "ecs" {
 }
 
 data "aws_iam_role" "ecs_task_execution" {
-  name = "${var.app_name}-ecs-task-execution-role"
+  name = "ecsTaskExecutionRoleNew"
 }
 
 # ECS Cluster

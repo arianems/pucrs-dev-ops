@@ -69,5 +69,7 @@ jobs:
         working-directory: ./terraform/app
 
       - name: Terraform Apply
+        env:
+          TF_LOG: INFO #debug
         run: terraform apply -auto-approve tfplan
         working-directory: ./terraform/app
