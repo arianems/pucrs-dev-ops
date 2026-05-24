@@ -1,5 +1,5 @@
 {
-    "taskDefinitionArn": "arn:aws:ecs:us-east-2:040609978782:task-definition/blazor-app-task:1",
+    "taskDefinitionArn": "arn:aws:ecs:us-east-2:040609978782:task-definition/blazor-app-task:2",
     "containerDefinitions": [
         {
             "name": "devops-app",
@@ -34,9 +34,10 @@
         }
     ],
     "family": "blazor-app-task",
-    "executionRoleArn": "arn:aws:iam::040609978782:role/service-role/ecsTaskExecutionRole",
+    "taskRoleArn": "arn:aws:iam::040609978782:role/ECS-role-e69bb7c3",
+    "executionRoleArn": "arn:aws:iam::040609978782:role/ecsTaskExecutionRoleNew",
     "networkMode": "awsvpc",
-    "revision": 1,
+    "revision": 2,
     "volumes": [],
     "status": "ACTIVE",
     "requiresAttributes": [
@@ -51,6 +52,9 @@
         },
         {
             "name": "com.amazonaws.ecs.capability.docker-remote-api.1.19"
+        },
+        {
+            "name": "com.amazonaws.ecs.capability.task-iam-role"
         },
         {
             "name": "ecs.capability.execution-role-ecr-pull"
@@ -80,7 +84,7 @@
     ],
     "cpu": "1024",
     "memory": "3072",
-    "registeredAt": "2026-05-21T23:32:02.899Z",
+    "registeredAt": "2026-05-21T23:46:16.243Z",
     "registeredBy": "arn:aws:iam::040609978782:root",
     "enableFaultInjection": false,
     "tags": []
