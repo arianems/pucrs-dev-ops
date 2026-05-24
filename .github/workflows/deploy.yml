@@ -56,14 +56,18 @@ jobs:
 
       - name: Terraform Init
         run: terraform init
+        working-directory: ./infra/terraform
 
       - name: Terraform Validate
         run: terraform validate
+        working-directory: ./infra/terraform
 
       - name: Terraform Plan
         env:
           TF_LOG: INFO #debug
         run: terraform plan -refresh=false -out=tfplan -var="container_image=${{ steps.build-image.outputs.image }}"
+        working-directory: ./infra/terraform
 
       - name: Terraform Apply
         run: terraform apply -auto-approve tfplan
+        working-directory: ./infra/terraform
