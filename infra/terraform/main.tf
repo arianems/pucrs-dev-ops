@@ -68,6 +68,33 @@ resource "aws_ecs_task_definition" "app" {
   }])
 }
 
+# EC2 Security Group
+resource "aws_security_group" "ecs" {
+  name        = "devops-app-alb-sg"
+  description = "Security group to allow access to app"
+  vpc_id      = "vpc-07bd90a2c0539ba96"
+
+  ingress {
+    description = "Allow HTTP app traffic"
+    from_port   = 8080
+    to_port     = 8080
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    description = "Allow all outbound traffic"
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name = "devops-app-alb-sg"
+  }
+}
+
 # ECS Service
 resource "aws_ecs_service" "app" {
   name            = "${var.app_name}-service"
