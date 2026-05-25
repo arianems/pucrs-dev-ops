@@ -23,8 +23,8 @@ jobs:
 
       - name: Build solution
         run: |
-            dotnet build ./src/DevOps.App/DevOps.App.slnx' --no-restore --configuration Release
+            dotnet build ./src/DevOps.App/DevOps.App.slnx --no-restore --configuration Release
 
       - name: Run tests
         run: |
-            dotnet test ./src/DevOps.App/DevOps.App.slnx' --no-build --configuration Release
+            dotnet test ./src/DevOps.App/DevOps.App.slnx --no-build --configuration Release
