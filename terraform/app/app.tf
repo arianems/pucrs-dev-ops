@@ -21,7 +21,7 @@ data "aws_lb_target_group" "app" {
 data "aws_security_group" "ecs" {
   filter {
     name   = "group-name"
-    values = ["${var.app_name}-sg"]
+    values = ["${var.app_name}-ecs-sg"]
   }
 
   vpc_id = data.aws_vpc.default.id

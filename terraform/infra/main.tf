@@ -57,6 +57,7 @@ resource "aws_security_group" "alb" {
   }
 }
 
+# ECS Security Group
 resource "aws_security_group" "ecs" {
   name        = "${var.app_name}-ecs-sg"
   description = "Security group for ECS tasks"
