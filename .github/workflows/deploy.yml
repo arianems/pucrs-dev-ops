@@ -56,7 +56,7 @@ jobs:
 
       - name: Terraform Init
         run: terraform init
-        working-directory: ./infra/terraform/app
+        working-directory: ./terraform/app
 
       - name: Terraform Validate
         run: terraform validate
