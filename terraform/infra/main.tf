@@ -30,14 +30,14 @@ data "aws_iam_role" "ecs_task_execution" {
   name = "ecsTaskExecutionRoleNew"
 }
 
-# EC2 Security Group
-resource "aws_security_group" "ecs" {
-  name        = "${var.app_name}-sg"
-  description = "Security group for ECS app"
+# ALB Security Group
+resource "aws_security_group" "alb" {
+  name        = "${var.app_name}-alb-sg"
+  description = "Security group for ALB"
   vpc_id      = data.aws_vpc.default.id
 
   ingress {
-    description = "Allow app traffic"
+    description = "Allow HTTP traffic"
     from_port   = 8080
     to_port     = 8080
     protocol    = "tcp"
@@ -53,7 +53,33 @@ resource "aws_security_group" "ecs" {
   }
 
   tags = {
-    Name = "${var.app_name}-sg"
+    Name = "${var.app_name}-alb-sg"
+  }
+}
+
+resource "aws_security_group" "ecs" {
+  name        = "${var.app_name}-ecs-sg"
+  description = "Security group for ECS tasks"
+  vpc_id      = data.aws_vpc.default.id
+
+  ingress {
+    description     = "Allow traffic from ALB only"
+    from_port       = 8080
+    to_port         = 8080
+    protocol        = "tcp"
+    security_groups = [aws_security_group.alb.id]
+  }
+
+  egress {
+    description = "Allow outbound traffic"
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name = "${var.app_name}-ecs-sg"
   }
 }
 
@@ -63,14 +89,11 @@ resource "aws_lb" "app" {
   internal           = false
   load_balancer_type = "application"
 
-  security_groups = [
-    aws_security_group.ecs.id
-  ]
+  security_groups = [aws_security_group.alb.id]
 
   subnets = data.aws_subnets.default.ids
 }
-
-# EC2 Target Group
+# Target Group
 resource "aws_lb_target_group" "app" {
   name             = "${var.app_name}-tg"
   port             = 8080
@@ -98,6 +121,7 @@ resource "aws_lb_target_group" "app" {
   }
 }
 
+# Listener
 resource "aws_lb_listener" "http" {
   load_balancer_arn = aws_lb.app.arn
   port              = 8080
