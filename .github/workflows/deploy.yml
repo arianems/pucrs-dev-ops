@@ -12,6 +12,8 @@ env:
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
   TF_VAR_aws_ecs_service: ${{ vars.ECS_SERVICE_NAME }}
   TF_VAR_aws_ecr_repository: ${{ vars.ECR_REPOSITORY }}  
+  TF_VAR_aws_ecs_cluster: ${{ vars.ECS_CLUSTER_NAME }}
+  TF_VAR_aws_region: ${{ vars.AWS_REGION }}
 
 jobs:
   deploy:
