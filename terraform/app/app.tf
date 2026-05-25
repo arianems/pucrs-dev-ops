@@ -53,7 +53,7 @@ resource "aws_ecs_task_definition" "app" {
       logDriver = "awslogs"
       options = {
         "awslogs-group"         = "/ecs/blazor-app-task"
-        "awslogs-create-group"  = "true",
+        "awslogs-create-group"  = "true"
         "awslogs-region"        = var.aws_region
         "awslogs-stream-prefix" = "ecs"
       }
