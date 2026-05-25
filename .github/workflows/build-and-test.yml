@@ -15,7 +15,7 @@ jobs:
       - name: Set up dot net
         uses: actions/setup-dotnet@v5
         with:
-            dotnet-version: latest
+            global-json-file: global.json
 
       - name: Restore dependencies
         run: |
