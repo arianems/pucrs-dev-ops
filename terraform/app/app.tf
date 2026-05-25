@@ -31,11 +31,6 @@ data "aws_iam_role" "ecs_task_execution" {
   name = "ecsTaskExecutionRoleNew"
 }
 
-# ECS Cluster
-data "aws_ecs_cluster" "main" {
-  cluster_name = var.aws_ecs_cluster
-}
-
 # ECS Task Definition
 resource "aws_ecs_task_definition" "app" {
   family                   = var.app_name
@@ -69,21 +64,21 @@ resource "aws_ecs_task_definition" "app" {
 # ECS Service
 resource "aws_ecs_service" "app" {
   name            = var.aws_ecs_service
-  cluster         = aws_ecs_cluster.main.id
+  cluster         = data.aws_ecs_cluster.main.arn
   task_definition = aws_ecs_task_definition.app.arn
   desired_count   = 0
   launch_type     = "FARGATE"
 
   network_configuration {
     subnets          = data.aws_subnets.default.ids
-    security_groups  = [aws_security_group.ecs.id]
+    security_groups  = [data.aws_security_group.ecs.id]
     assign_public_ip = true
   }
 
   force_new_deployment = true
   
   load_balancer {
-  target_group_arn = aws_lb_target_group.app.arn
+  target_group_arn = data.aws_lb_target_group.app.arn
   container_name   = var.app_name
   container_port   = 8080
   }
