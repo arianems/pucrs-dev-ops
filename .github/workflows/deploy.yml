@@ -16,8 +16,8 @@ env:
   TF_VAR_aws_region: ${{ vars.AWS_REGION }}
 
 jobs:
-  deploy:
-    name: Deploy
+  deploy-dev:
+    name: Deploy to Dev
     runs-on: ubuntu-latest
     environment: dev
 

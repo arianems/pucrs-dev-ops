@@ -1,0 +1,30 @@
+name: Deploy Application
+
+on:
+  push:
+jobs:
+  build-and-test:
+    name: CI - Build and Test
+    runs-on: ubuntu-latest
+    environment: dev
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        
+      - name: Set up dot net
+        uses: actions/setup-dotnet@v5
+        with:
+            dotnet-version: latest
+
+      - name: Restore dependencies
+        run: |
+            dotnet restore ./src/DevOps.App/DevOps.App.slnx
+
+      - name: Build solution
+        run: |
+            dotnet build ./src/DevOps.App/DevOps.App.slnx' --no-restore --configuration Release
+
+      - name: Run tests
+        run: |
+            dotnet test ./src/DevOps.App/DevOps.App.slnx' --no-build --configuration Release
