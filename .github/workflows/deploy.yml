@@ -64,7 +64,7 @@ jobs:
 
       - name: Terraform Plan
         env:
-          TF_LOG: INFO #debug
+          TF_LOG: DEBUG #debug
         run: terraform plan -refresh=false -out=tfplan -var="container_image=${{ steps.build-image.outputs.image }}"
         working-directory: ./terraform/app
 
