@@ -1,7 +1,19 @@
-name: Deploy Application
+name: CD - Deploy Application
 
 on:
-  workflow_dispatch
+  # push:
+  #   branches:
+  #     - main
+  # pull_request:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: Target environment
+        required: true
+        type: choice
+        options:
+          - prod
+          - dev
 
 env:
   AWS_REGION: ${{ vars.AWS_REGION }}               
@@ -16,10 +28,11 @@ env:
   TF_VAR_aws_region: ${{ vars.AWS_REGION }}
 
 jobs:
-  deploy-dev:
-    name: Deploy to Dev
+  deploy:
+    name: Deploy to ${{ inputs.environment || 'dev' }}
     runs-on: ubuntu-latest
-    environment: dev
+    environment: ${{ inputs.environment || 'dev' }}
+    if: github.event_name != 'workflow_dispatch' || inputs.environment == 'prod'
 
     steps:
       - name: Checkout
@@ -65,13 +78,9 @@ jobs:
         working-directory: ./terraform/app
 
       - name: Terraform Plan
-        env:
-          TF_LOG: DEBUG #debug
         run: terraform plan -refresh=false -out=tfplan -var="container_image=${{ steps.build-image.outputs.image }}"
         working-directory: ./terraform/app
 
       - name: Terraform Apply
-        env:
-          TF_LOG: DEBUG #debug
         run: terraform apply -auto-approve tfplan
         working-directory: ./terraform/app
