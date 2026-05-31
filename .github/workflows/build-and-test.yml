@@ -2,6 +2,7 @@ name: CI - Build and test solution
 
 on:
   push:
+  workflow_dispatch:
 jobs:
   build-and-test:
     name: CI - Build and Test
