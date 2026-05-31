@@ -1,3 +1,4 @@
 <Solution>
+  <Project Path="DevOps.App.Tests/DevOps.App.Tests.csproj" Id="5a4beaf0-c5cd-4a9e-b8e0-a1a6c9b66783" />
   <Project Path="DevOps.App/DevOps.App.csproj" />
 </Solution>

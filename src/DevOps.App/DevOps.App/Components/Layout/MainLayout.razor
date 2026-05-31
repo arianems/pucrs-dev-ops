@@ -1,23 +1,27 @@
 ﻿@inherits LayoutComponentBase
+@inject NavigationManager navigationManager
 
-<div class="page">
-    <div class="sidebar">
-        <NavMenu />
-    </div>
-
+<div class="page bg-dark">
     <main>
         <div class="top-row px-4">
-            <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a>
+            @if (this.navigationManager.Uri.Contains("/about") || this.navigationManager.Uri.Contains("/not-found") || this.navigationManager.Uri.Contains("/error"))
+            {
+                <a href="/">Página Inicial</a>
+            }
+            else
+            {
+                <a href="/about">Sobre</a>
+            }
         </div>
 
-        <article class="content px-4">
+        <div class="content px-4">
             @Body
-        </article>
+        </div>
     </main>
 </div>
 
 <div id="blazor-error-ui" data-nosnippet>
-    An unhandled error has occurred.
-    <a href="." class="reload">Reload</a>
+    Oops! Algo errado aconteceu!
+    <a href="." class="reload">Recarregar</a>
     <span class="dismiss">🗙</span>
 </div>

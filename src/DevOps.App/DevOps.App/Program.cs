@@ -1,10 +1,14 @@
 using DevOps.App.Components;
+using DevOps.App.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
+
+
+builder.Services.AddScoped<IBase64Encoder, Base64Encoder>();
 
 var app = builder.Build();
 
