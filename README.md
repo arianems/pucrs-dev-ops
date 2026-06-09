@@ -1,3 +1,7 @@
+[![CI - Build and test solution](https://github.com/arianems/pucrs-dev-ops/actions/workflows/build-and-test.yml/badge.svg?branch=main)](https://github.com/arianems/pucrs-dev-ops/actions/workflows/build-and-test.yml)
+
+[![CD - Deploy Application](https://github.com/arianems/pucrs-dev-ops/actions/workflows/deploy.yml/badge.svg)](https://github.com/arianems/pucrs-dev-ops/actions/workflows/deploy.yml)
+
 
 # Projeto DevOps - Na Prática
 
