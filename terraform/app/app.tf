@@ -1,3 +1,11 @@
+terraform {
+  backend "s3" {
+    bucket = "${var.app_name}-terraform-state"
+    key    = "app/terraform.tfstate"
+    region = var.aws_region
+  }
+}
+
 # Sources
 data "aws_vpc" "default" {
   default = true

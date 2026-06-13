@@ -78,7 +78,7 @@ jobs:
               uses: hashicorp/setup-terraform@v3
 
             - name: Terraform Init
-              run: terraform init
+              run: terraform init -backend-config="region=${{ env.AWS_REGION }}"
               working-directory: ./terraform/app
 
             - name: Terraform Validate
@@ -86,9 +86,13 @@ jobs:
               working-directory: ./terraform/app
 
             - name: Terraform Plan
+              env:
+                  TF_LOG: DEBUG
               run: terraform plan -out=tfplan -var="container_image=${{ steps.build-image.outputs.image }}"
               working-directory: ./terraform/app
 
             - name: Terraform Apply
+              env:
+                  TF_LOG: DEBUG
               run: terraform apply -auto-approve tfplan
               working-directory: ./terraform/app

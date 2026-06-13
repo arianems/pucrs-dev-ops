@@ -13,6 +13,19 @@ data "aws_subnets" "default" {
   }
 }
 
+# Terraform State Bucket
+resource "aws_s3_bucket" "terraform_state" {
+  bucket = "${var.app_name}-terraform-state"
+
+  lifecycle {
+    prevent_destroy = true
+  }
+
+  tags = {
+    Name = "${var.app_name}-terraform-state"
+  }
+}
+
 resource "aws_ecr_repository" "app" {
   name                 = var.aws_ecr_repository
   image_tag_mutability = "MUTABLE"
