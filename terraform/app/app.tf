@@ -74,8 +74,6 @@ resource "aws_ecs_service" "app" {
     security_groups  = [data.aws_security_group.ecs.id]
     assign_public_ip = true
   }
-
-  force_new_deployment = true
   
   load_balancer {
   target_group_arn = data.aws_lb_target_group.app.arn
