@@ -47,6 +47,7 @@ jobs:
         name: Deploy Application
         runs-on: ubuntu-latest
         environment: dev
+        needs: [build-and-test]
 
         steps:
             - name: Checkout
