@@ -1,0 +1,104 @@
+name: CI/CD - Build, Test and Deploy
+
+on:
+    push:
+    workflow_dispatch:
+env:
+    AWS_REGION: ${{ vars.AWS_REGION }}
+    ECR_REPOSITORY: ${{ vars.ECR_REPOSITORY_NAME }}
+    ECS_SERVICE: ${{ vars.ECS_SERVICE_NAME }}
+    CONTAINER_NAME: ${{ vars.CONTAINER_NAME }}
+    AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+    AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+    TF_VAR_aws_ecs_service: ${{ vars.ECS_SERVICE_NAME }}
+    TF_VAR_aws_ecr_repository: ${{ vars.ECR_REPOSITORY }}
+    TF_VAR_aws_ecs_cluster: ${{ vars.ECS_CLUSTER_NAME }}
+    TF_VAR_aws_region: ${{ vars.AWS_REGION }}
+
+jobs:
+    build-and-test:
+        name: CI - Build and Test
+        runs-on: ubuntu-latest
+        environment: dev
+
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v6
+
+            - name: Set up dot net
+              uses: actions/setup-dotnet@v5
+              with:
+                  global-json-file: global.json
+
+            - name: Restore dependencies
+              run: |
+                  dotnet restore ./src/DevOps.App/DevOps.App.slnx
+
+            - name: Build solution
+              run: |
+                  dotnet build ./src/DevOps.App/DevOps.App.slnx --no-restore --configuration Release
+
+            - name: Run tests
+              run: |
+                  dotnet test ./src/DevOps.App/DevOps.App.slnx --no-build --configuration Release
+
+    deploy:
+        if: github.ref == 'refs/heads/main'
+        name: Deploy Application
+        runs-on: ubuntu-latest
+        environment: dev
+
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v6
+
+            - name: Configure AWS credentials
+              uses: aws-actions/configure-aws-credentials@0e613a0980cbf65ed5b322eb7a1e075d28913a83
+              with:
+                  aws-access-key-id: ${{ env.AWS_ACCESS_KEY_ID }}
+                  aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
+                  aws-region: ${{ env.AWS_REGION }}
+
+            - name: Login to Amazon ECR
+              id: login-ecr
+              uses: aws-actions/amazon-ecr-login@62f4f872db3836360b72999f4b87f1ff13310f3a
+
+            - name: Build, tag, and push image to Amazon ECR
+              id: build-image
+              env:
+                  ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+                  IMAGE_TAG: ${{ github.sha }}
+              run: |
+                  docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG -f ./src/DevOps.App/DevOps.App/Dockerfile .
+                  docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+                  echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
+
+            - name: Setup Terraform
+              uses: hashicorp/setup-terraform@v3
+
+            - name: Configure AWS credentials
+              uses: aws-actions/configure-aws-credentials@0e613a0980cbf65ed5b322eb7a1e075d28913a83
+              with:
+                  aws-access-key-id: ${{ env.AWS_ACCESS_KEY_ID }}
+                  aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
+                  aws-region: ${{ env.AWS_REGION }}
+
+            - name: Terraform Init
+              run: terraform init
+              working-directory: ./terraform/app
+
+            - name: Terraform Validate
+              run: terraform validate
+              working-directory: ./terraform/app
+
+            - name: Terraform Plan
+              env:
+                  TF_LOG: DEBUG
+              run: terraform plan -refresh=false -out=tfplan -var="container_image=${{ steps.build-image.outputs.image }}"
+              working-directory: ./terraform/app
+
+            - name: Terraform Apply
+              env:
+                  TF_LOG: DEBUG
+              run: terraform apply -auto-approve tfplan
+              working-directory: ./terraform/app
