@@ -86,13 +86,9 @@ jobs:
               working-directory: ./terraform/app
 
             - name: Terraform Plan
-              env:
-                  TF_LOG: DEBUG
-              run: terraform plan -refresh=false -out=tfplan -var="container_image=${{ steps.build-image.outputs.image }}"
+              run: terraform plan -out=tfplan -var="container_image=${{ steps.build-image.outputs.image }}"
               working-directory: ./terraform/app
 
             - name: Terraform Apply
-              env:
-                  TF_LOG: DEBUG
               run: terraform apply -auto-approve tfplan
               working-directory: ./terraform/app

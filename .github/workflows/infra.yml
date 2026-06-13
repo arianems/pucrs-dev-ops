@@ -47,7 +47,7 @@ jobs:
       - name: Terraform Plan
         env:
           TF_LOG: INFO
-        run: terraform plan -refresh=false -out=tfplan
+        run: terraform plan -out=tfplan
 
       - name: Terraform Apply
         run: terraform apply -auto-approve tfplan
